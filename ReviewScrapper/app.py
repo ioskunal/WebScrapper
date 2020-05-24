@@ -15,8 +15,15 @@ def getReviews():
         dbConnection = pymongo.MongoClient("mongodb://localhost:27017/")
         db = dbConnection['reviews']
         reviews = db[searchString].find({})
-        if reviews.count() > 0 :
-            return {"response" :reviews}
+        if reviews.count() > 0:
+            arrReviews = []
+            for review in reviews:
+                name = review["name"]
+                comment = review["comment"]
+                rating = review["rating"]
+                dict = {"name": name, "comment": comment, "rating": rating}
+                arrReviews.append(dict)
+            return {"response" :arrReviews}
         else:
             url = "https://www.flipkart.com/search?q=" + searchString
             client = urlopen(url)
@@ -49,7 +56,7 @@ def getReviews():
                     # return {"name": name, "comment": comment, "rating": rating, "product": productLink}
                 except:
                     print("Skipping")
-            return {"response" : arrReviews}
+            return {"responsee" : arrReviews}
     except:
         return "Something went wrong"
 
